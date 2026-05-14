@@ -1,0 +1,2 @@
+timestamp,source,issue_type,record_count,action_taken
+2026-05-15T08:26:21.966813,Merged dataset,Missing values after alignment,5,Retained rows for Power BI visibility
