@@ -12,7 +12,6 @@ vix_path = "data/raw/vix_data.csv"
 output_path = "data/curated/market_base.csv"
 log_path = "logs/data_quality_log.csv"
 
-# Quality log storage
 quality_logs = []
 
 def log_issue(source, issue_type, record_count, action_taken):
@@ -24,17 +23,17 @@ def log_issue(source, issue_type, record_count, action_taken):
         "action_taken": action_taken
     })
 
-# Read raw CSV files
+# Read raw files
 sp500 = pd.read_csv(sp500_path)
 vix = pd.read_csv(vix_path)
 
-# Convert dates and standardise timezone handling
+# Standardise dates
 sp500["Date"] = pd.to_datetime(sp500["Date"], utc=True).dt.date
-vix["Date"] = pd.to_datetime(vix["Date"], utc=True).dt.date
+vix["Date"] = pd.to_datetime(vix["observation_date"]).dt.date
 
 # Keep required columns only
 sp500 = sp500[["Date", "Open", "High", "Low", "Close", "Volume"]].copy()
-vix = vix[["Date", "Close"]].copy()
+vix = vix[["Date", "VIXCLS"]].copy()
 
 # Rename columns
 sp500 = sp500.rename(columns={
@@ -46,16 +45,19 @@ sp500 = sp500.rename(columns={
 })
 
 vix = vix.rename(columns={
-    "Close": "VIX_Close"
+    "VIXCLS": "VIX_Close"
 })
 
-# Basic data quality checks
+# Convert VIX to numeric
+vix["VIX_Close"] = pd.to_numeric(vix["VIX_Close"], errors="coerce")
+
+# Data quality checks
 sp500_nulls = sp500.isnull().sum().sum()
 vix_nulls = vix.isnull().sum().sum()
 
 if sp500_nulls > 0:
     log_issue(
-        "S&P 500",
+        "Yahoo Finance S&P 500",
         "Null values detected",
         int(sp500_nulls),
         "Retained rows and flagged for review"
@@ -63,13 +65,13 @@ if sp500_nulls > 0:
 
 if vix_nulls > 0:
     log_issue(
-        "VIX",
+        "FRED VIX",
         "Null values detected",
         int(vix_nulls),
         "Retained rows and flagged for review"
     )
 
-# Merge datasets on Date
+# Merge on common date axis
 market_base = pd.merge(
     sp500,
     vix,
@@ -77,24 +79,22 @@ market_base = pd.merge(
     how="outer"
 )
 
-# Sort by Date
+# Sort by date
 market_base = market_base.sort_values("Date")
 
-# Check merged dataset for missing values
+# Log missing values after alignment
 alignment_nulls = market_base.isnull().sum().sum()
 
 if alignment_nulls > 0:
     log_issue(
         "Merged dataset",
-        "Missing values after alignment",
+        "Missing values after common date alignment",
         int(alignment_nulls),
-        "Retained rows for Power BI visibility"
+        "Retained rows so gaps remain visible in Power BI"
     )
 
-# Save curated dataset
+# Save outputs
 market_base.to_csv(output_path, index=False)
-
-# Save quality log
 pd.DataFrame(quality_logs).to_csv(log_path, index=False)
 
 print("Transformation complete.")
