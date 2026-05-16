@@ -10,7 +10,7 @@ Path("data/raw").mkdir(parents=True, exist_ok=True)
 # S&P 500 market index data
 # -----------------------------
 sp500 = yf.Ticker("^GSPC")
-sp500_data = sp500.history(period="1y")
+sp500_data = sp500.history(start="2024-04-01")
 sp500_data.to_csv("data/raw/sp500_data.csv")
 
 # -----------------------------

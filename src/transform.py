@@ -78,9 +78,15 @@ market_base = pd.merge(
     on="Date",
     how="outer"
 )
-
+# Align both datasets to common start date
+market_base = market_base[
+    market_base["Date"] >= pd.to_datetime("2024-04-01").date()
+]
 # Sort by date
 market_base = market_base.sort_values("Date")
+
+# Add trading day flag based on S&P 500 availability
+market_base["Is_SP500_Trading_Day"] = market_base["SP500_Close"].notna().astype(int)
 
 # Log missing values after alignment
 alignment_nulls = market_base.isnull().sum().sum()
