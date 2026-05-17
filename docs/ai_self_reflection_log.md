@@ -216,7 +216,7 @@ This demonstrates **senior engineer thinking:**
 
 
 
-My response was NO - not to commit yet - it is a valid suggestion, but not relevant to this case study right now - it is small dataset.
+## My response was NO - not to commit yet - it is a valid suggestion, but not relevant to this case study right now - it is small dataset.
 
 
 Next question - review the timezone inconsistencies.  here is response: 
@@ -322,7 +322,7 @@ if "observation_date" not in vix_data.columns:
 **Detailed analysis saved** to session workspace. Should I incorporate these timezone improvements into the final code changes?
 
 
-My response:  no - not yet.  I want to review this code again, Now critique your own review.
+## My response:  no - not yet.  I want to review this code again, Now critique your own review.
 
 Identify:
 - any assumptions you made without evidence from the workspace
@@ -429,10 +429,8 @@ I applied **production-grade engineering standards to a case study**. The code w
 
 
 
-My next input: 
 
-For timezone handling:  can you review your suggstion and make sure that the final data is in UTC so that it can be merged with other datasets in the Power BI model.  Give the suggested actions but do not yet action it.
 
 *********AI TIMED OUT AND WOULD NOT WORK
 
-TT DECISION:  given there is no clear error that is causing an actual error - I am going to proceed for now. 
+## Tina DECISION:  given there is no clear error that is causing an actual error - I am going to proceed for now.
