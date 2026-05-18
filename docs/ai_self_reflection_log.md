@@ -216,7 +216,8 @@ This demonstrates **senior engineer thinking:**
 
 
 
-## My response was NO - not to commit yet - it is a valid suggestion, but not relevant to this case study right now - it is small dataset.
+## My response was NO## 
+I said not to commit yet - it is a valid suggestion, but not relevant to this case study right now - it is small dataset.
 
 
 Next question - review the timezone inconsistencies.  here is response: 
@@ -322,7 +323,9 @@ if "observation_date" not in vix_data.columns:
 **Detailed analysis saved** to session workspace. Should I incorporate these timezone improvements into the final code changes?
 
 
-## My response:  no - not yet.  I want to review this code again, Now critique your own review.
+## My response:
+no - not yet.  I want to review this code again, 
+Now critique your own review.
 
 Identify:
 - any assumptions you made without evidence from the workspace
@@ -433,4 +436,9 @@ I applied **production-grade engineering standards to a case study**. The code w
 
 *********AI TIMED OUT AND WOULD NOT WORK
 
-## Tina DECISION:  given there is no clear error that is causing an actual error - I am going to proceed for now.
+## Tina DECISION:##  
+given there is no clear error that is causing an actual error - I am going to keep as is for now.
+
+Tina reflection:  I opened the code and could see that timezone was treated correctly.  Manually verified. 
+Given the data is (always) available at the same time each day and DATE is all we need for the join, AND it is bad practice to include time if you only use date and not joining on time... keeping as it is.
+VIX data is date only - so joining on DATE only. 
