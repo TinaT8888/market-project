@@ -195,6 +195,8 @@ Outputs:
 /data/curated/market_base.csv   (check for confirmation message "Transformation complete.")
 /logs/data_quality_log.csv
 ```
+Note: The local pipeline is repeatable through `run_pipeline.bat`, which executes ingestion and transformation sequentially. In a local environment, this can be scheduled using Windows Task Scheduler. In a production environment, the same pattern could be orchestrated through Microsoft Fabric Pipelines, Azure Data Factory, etc.
+The local batch on my laptop runs at 8am. Sydney 
 
 ## Step 3 – Open Power BI
 
@@ -208,6 +210,7 @@ Refresh the model:
 
 ```
 Home → Refresh
+Refresh is set for 8:15am Sydney .  In Demo workspace in Power BI. 
 Future steps:  Not included in this project
 Determine appropriate access and create appropriate access groups to apply to Power BI app.
 Publish the report to our team’s Workspace and then include in relevant audience App in Power BI. 
