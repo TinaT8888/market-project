@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Market intelligence report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e1a9eaf8-937e-48e1-8dea-e8111fda6db8"
+  }
+}

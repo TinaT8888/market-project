@@ -1,3 +1,3 @@
 timestamp,source,issue_type,record_count,action_taken
-2026-05-18T14:52:29.126147,FRED VIX,Null values detected,302,Retained rows and flagged for review
-2026-05-18T14:52:29.129601,Merged dataset,Missing values after common date alignment,112,Retained rows so gaps remain visible in Power BI
+2026-05-19T10:26:49.924079,FRED VIX,Null values detected,302,Retained rows and flagged for review
+2026-05-19T10:26:49.927724,Merged dataset,Missing values after common date alignment,112,Retained rows so gaps remain visible in Power BI

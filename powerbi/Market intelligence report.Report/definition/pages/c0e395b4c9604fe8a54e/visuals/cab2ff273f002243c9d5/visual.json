@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "cab2ff273f002243c9d5",
+  "position": {
+    "x": 621.0051546391752,
+    "y": 235.82474226804123,
+    "z": 18000,
+    "height": 30.919243986254294,
+    "width": 358.97766323024052,
+    "tabOrder": 18000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "View investor and market sentiment",
+                    "textStyle": {
+                      "fontFamily": "Calibri"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

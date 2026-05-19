@@ -1,0 +1,4 @@
+relationship 3824592b-ed94-c7e3-6dca-c880e5b906f7
+	fromColumn: market_base.Date
+	toColumn: Calendar.Date
+

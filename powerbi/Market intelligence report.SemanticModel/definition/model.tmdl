@@ -1,0 +1,19 @@
+model Model
+	culture: en-AU
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-AU
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["market_base"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table market_base
+ref table Calendar
+
+ref cultureInfo en-AU
+

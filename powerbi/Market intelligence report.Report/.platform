@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Market intelligence report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "54d85b9a-1309-4d25-a831-0bb56945819b"
+  }
+}

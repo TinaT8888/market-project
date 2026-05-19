@@ -1,0 +1,205 @@
+table Calendar
+	lineageTag: af6037ca-4943-4f7d-b15d-a89d419e134f
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: Short Date
+		lineageTag: ce05df15-c0f8-4431-8b16-85f400269628
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		formatString: 0
+		lineageTag: 05d44bc5-7886-4e6d-a14e-5b4e094fe02e
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		lineageTag: bf48c68e-9917-4d00-be39-8e290186bb1c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number'
+		formatString: 0
+		lineageTag: 1c502604-39d9-41f0-b515-18fbc9e74089
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Month Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		lineageTag: c5fb2fa8-65a3-417a-8bd1-4096d6e949b8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Financial Year Number'
+		formatString: 0
+		lineageTag: 4aee435e-9b48-4ecb-adbf-aa891c60b1d9
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Financial Year Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Financial Year'
+		lineageTag: b21aa995-6493-4dd4-8cd3-e900669c7e69
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Financial Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Financial Month'
+		formatString: 0
+		lineageTag: 39f3ff42-281b-410e-9c2b-00ad4121511e
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Financial Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Financial Quarter Number'
+		lineageTag: 8d8c6880-b720-4873-96b3-21bc2d0c3b5b
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Financial Quarter Number]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Financial Quarter'
+		lineageTag: 67c4af1a-5ea3-4d18-9d3a-1ffcebdb962f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Financial Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is SP500 Trading Day' =
+			
+			VAR CurrentDate = 'Calendar'[Date]
+			VAR TradingDayFlag =
+			    CALCULATE(
+			        MAX('market_base'[Is_SP500_Trading_Day]),
+			        FILTER(
+			            'market_base',
+			            'market_base'[Date] = CurrentDate
+			        )
+			    )
+			RETURN
+			IF(
+			    TradingDayFlag = 1,
+			    1,
+			    0
+			)
+		formatString: 0
+		lineageTag: 11e58e63-2e04-4b40-83a9-2d55b2688a70
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    CALENDAR(
+				        MIN('market_base'[Date]),
+				        MAX('market_base'[Date])
+				    ),
+				
+				    "Year", YEAR([Date]),
+				
+				    "Month", FORMAT([Date], "MMM"),
+				
+				    "Month Number", MONTH([Date]),
+				
+				    "Quarter", "Q" & FORMAT([Date], "Q"),
+				
+				    "Financial Year Number",
+				        IF(
+				            MONTH([Date]) >= 4,
+				            YEAR([Date]) + 1,
+				            YEAR([Date])
+				        ),
+				
+				    "Financial Year",
+				        "FY" &
+				        RIGHT(
+				            FORMAT(
+				                IF(
+				                    MONTH([Date]) >= 4,
+				                    YEAR([Date]) + 1,
+				                    YEAR([Date])
+				                ),
+				                "0000"
+				            ),
+				            2
+				        ),
+				
+				    "Financial Month",
+				        IF(
+				            MONTH([Date]) >= 4,
+				            MONTH([Date]) - 3,
+				            MONTH([Date]) + 9
+				        ),
+				
+				    "Financial Quarter Number",
+				        ROUNDUP(
+				            DIVIDE(
+				                IF(
+				                    MONTH([Date]) >= 4,
+				                    MONTH([Date]) - 3,
+				                    MONTH([Date]) + 9
+				                ),
+				                3
+				            ),
+				            0
+				        ),
+				
+				    "Financial Quarter",
+				        "FY" &
+				        RIGHT(
+				            FORMAT(
+				                IF(
+				                    MONTH([Date]) >= 4,
+				                    YEAR([Date]) + 1,
+				                    YEAR([Date])
+				                ),
+				                "0000"
+				            ),
+				            2
+				        )
+				        &
+				        "Q"
+				        &
+				        ROUNDUP(
+				            DIVIDE(
+				                IF(
+				                    MONTH([Date]) >= 4,
+				                    MONTH([Date]) - 3,
+				                    MONTH([Date]) + 9
+				                ),
+				                3
+				            ),
+				            0
+				        )
+				)
+
+	annotation PBI_Id = d1c5622869c842e8948af9365de93c21
+

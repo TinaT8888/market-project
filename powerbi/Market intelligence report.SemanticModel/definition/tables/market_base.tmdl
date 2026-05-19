@@ -1,0 +1,365 @@
+table market_base
+	lineageTag: 4325faa4-0541-496c-821c-134327caf00d
+
+	measure 'Latest SP500 Close' =
+			
+			VAR CurrentDate =
+			    MAX('Calendar'[Date])
+			VAR LastTradingDate =
+			    CALCULATE(
+			        MAX('Calendar'[Date]),
+			        FILTER(
+			            ALL('Calendar'[Date]),
+			            'Calendar'[Date] <= CurrentDate
+			                && CALCULATE(MAX('Calendar'[Is SP500 Trading Day])) = 1
+			        )
+			    )
+			RETURN
+			CALCULATE(
+			    [SP500 Close],
+			    'Calendar'[Date] = LastTradingDate
+			)
+		lineageTag: be2c1d7d-5f2e-4c5d-a08e-ff7abda1373e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Latest VIX' =
+			
+			VAR CurrentDate =
+			    MAX('Calendar'[Date])
+			VAR LastAvailableDate =
+			    CALCULATE(
+			        MAX('Calendar'[Date]),
+			        FILTER(
+			            ALL('Calendar'[Date]),
+			            'Calendar'[Date] <= CurrentDate
+			                && NOT ISBLANK(CALCULATE([VIX Close]))
+			        )
+			    )
+			RETURN
+			CALCULATE(
+			    [VIX Close],
+			    'Calendar'[Date] = LastAvailableDate
+			)
+		lineageTag: a78be937-3d22-4a5f-97b1-1709b7b77522
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'SP500 7D Rolling Avg' =
+			
+			VAR CurrentDate =
+			    MAX('Calendar'[Date])
+			VAR TradingDates =
+			    TOPN(
+			        7,
+			        FILTER(
+			            ALL('Calendar'[Date], 'Calendar'[Is SP500 Trading Day]),
+			            'Calendar'[Date] <= CurrentDate
+			                && 'Calendar'[Is SP500 Trading Day] = 1
+			        ),
+			        'Calendar'[Date],
+			        DESC
+			    )
+			RETURN
+			AVERAGEX(
+			    TradingDates,
+			    CALCULATE([SP500 Close])
+			)
+		lineageTag: 0d6412e1-561b-4998-a853-809199b7af9e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'SP500 90D Change %' =
+			
+			VAR CurrentContextDate =
+			    MAX('Calendar'[Date])
+			
+			VAR CurrentTradingDate =
+			    CALCULATE(
+			        MAX('Calendar'[Date]),
+			        FILTER(
+			            ALL('Calendar'[Date], 'Calendar'[Is SP500 Trading Day]),
+			            'Calendar'[Date] <= CurrentContextDate
+			                && 'Calendar'[Is SP500 Trading Day] = 1
+			        )
+			    )
+			
+			VAR CurrentClose =
+			    CALCULATE(
+			        [SP500 Close],
+			        'Calendar'[Date] = CurrentTradingDate
+			    )
+			
+			VAR PriorTradingDate =
+			    CALCULATE(
+			        MAX('Calendar'[Date]),
+			        FILTER(
+			            ALL('Calendar'[Date], 'Calendar'[Is SP500 Trading Day]),
+			            'Calendar'[Date] <= CurrentTradingDate - 90
+			                && 'Calendar'[Is SP500 Trading Day] = 1
+			        )
+			    )
+			
+			VAR PriorClose =
+			    CALCULATE(
+			        [SP500 Close],
+			        'Calendar'[Date] = PriorTradingDate
+			    )
+			
+			RETURN
+			DIVIDE(CurrentClose - PriorClose, PriorClose)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 6f083bc9-6b91-4512-a797-de118e5aa202
+
+	measure 'Market Signal' =
+			
+			SWITCH(
+			    [Market Signal Score],
+			    3, "Red - elevated risk",
+			    2, "Amber - heightened risk",
+			    1, "Green - monitor",
+			    BLANK()
+			)
+		lineageTag: 3a91be42-8059-4de1-b1d3-ee47a2158552
+
+	measure 'SP500 Close' =
+			
+			AVERAGE('market_base'[SP500_Close])
+		lineageTag: 72c248de-6182-44b4-8d1d-bae45d78265a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'SP500 Close Trading Days' =
+			
+			VAR IsTradingDay =
+			    MAX('Calendar'[Is SP500 Trading Day])
+			RETURN
+			IF(
+			    IsTradingDay = 1,
+			    [SP500 Close],
+			    BLANK()
+			)
+		lineageTag: d591848a-962c-42e5-8398-b236ba41bff5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'VIX Close' =
+			
+			AVERAGE('market_base'[VIX_Close])
+		lineageTag: 85129e3c-2ebb-435b-b59c-0d1b39c6d87c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'VIX Close Forward Filled' =
+			
+			VAR CurrentDate =
+			    MAX('Calendar'[Date])
+			VAR LastAvailableDate =
+			    CALCULATE(
+			        MAX('Calendar'[Date]),
+			        FILTER(
+			            ALL('Calendar'[Date]),
+			            'Calendar'[Date] <= CurrentDate
+			                && NOT ISBLANK(CALCULATE([VIX Close]))
+			        )
+			    )
+			RETURN
+			CALCULATE(
+			    [VIX Close],
+			    'Calendar'[Date] = LastAvailableDate
+			)
+		lineageTag: c656abc0-4c4d-4b49-a210-2817deb5d27c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Missing SP500 Count' =
+			
+			COUNTROWS(
+			    FILTER(
+			        'market_base',
+			        ISBLANK('market_base'[SP500_Close])
+			    )
+			)
+		formatString: 0
+		lineageTag: e75c80ad-eefb-471f-a500-6f5d3016dfc3
+
+	measure 'Missing VIX Count' =
+			
+			COUNTROWS(
+			    FILTER(
+			        'market_base',
+			        ISBLANK('market_base'[VIX_Close])
+			    )
+			)
+		formatString: 0
+		lineageTag: 54d949fb-a254-4989-9429-9cc5e907944f
+
+	measure 'Market Signal 2' =
+			
+			SWITCH(
+			    [Market Signal 2 Score],
+			    3, "Red",
+			    2, "Amber",
+			    "Green"
+			)
+		lineageTag: a97bbb5f-3cc1-4334-b129-5be68649ef50
+
+	measure 'Market Signal Score' =
+			
+			VAR CurrentVIX =
+			    [Latest VIX]
+			VAR CurrentClose =
+			    [Latest SP500 Close]
+			VAR RollingAvg =
+			    [SP500 7D Rolling Avg]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(CurrentVIX) || ISBLANK(CurrentClose) || ISBLANK(RollingAvg), BLANK(),
+			    CurrentVIX >= 30 || CurrentClose < RollingAvg * 0.97, 3,
+			    CurrentVIX >= 20 || CurrentClose < RollingAvg, 2,
+			    1
+			)
+		formatString: 0
+		lineageTag: 0baa0814-047f-4d34-8463-dec96362a367
+
+	measure 'Market Signal 2 Score' = ```
+			
+			VAR _vix = [Latest VIX]
+			VAR _close = [Latest SP500 Close]
+			VAR _avg = [SP500 7D Rolling Avg]
+			
+			RETURN 
+			SWITCH( TRUE(),
+			    _vix >= 30 && _close < (_avg * 0.97), 3,   -- High Fear + Significant Drop
+			    _vix >= 20 && _close < _avg, 2,         -- Moderate Fear + Price Weakness
+			    1                                       -- Calm or Rising Market
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 513eddea-c770-4355-a839-170a5850f222
+
+	measure 'SP500 90D Change RAG' =
+			
+			VAR Change90D =
+			    [SP500 90D Change %]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(Change90D), BLANK(),
+			    Change90D <= -0.03, "Red",
+			    Change90D < 0, "Amber",
+			    "Green"
+			)
+		lineageTag: 80dfa682-86c3-40e9-86a9-9fd74a6b1529
+
+	measure 'SP500 90D Change RAG Score' =
+			
+			VAR Change90D =
+			    [SP500 90D Change %]
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(Change90D), BLANK(),
+			    Change90D <= -0.03, 3,
+			    Change90D < 0, 2,
+			    1
+			)
+		formatString: 0
+		lineageTag: ab33edd6-498d-4008-91a1-1860fecae693
+
+	column Date
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 5587d1ef-9720-460e-99b3-a663ee553c9c
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column SP500_Open
+		dataType: double
+		lineageTag: 854252e1-6f60-4d83-b5d0-b0b4c510f75e
+		summarizeBy: sum
+		sourceColumn: SP500_Open
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SP500_High
+		dataType: double
+		lineageTag: 396bef21-48d2-4f53-8169-bc4eacb10484
+		summarizeBy: sum
+		sourceColumn: SP500_High
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SP500_Low
+		dataType: double
+		lineageTag: 7e388554-b01e-4b49-8644-c38e05cefcb2
+		summarizeBy: sum
+		sourceColumn: SP500_Low
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SP500_Close
+		dataType: double
+		lineageTag: faddf79a-6e42-4111-af1e-e664334eb629
+		summarizeBy: sum
+		sourceColumn: SP500_Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SP500_Volume
+		dataType: int64
+		formatString: 0
+		lineageTag: 45e63359-38b2-446a-8a03-9a144dda89b9
+		summarizeBy: sum
+		sourceColumn: SP500_Volume
+
+		annotation SummarizationSetBy = Automatic
+
+	column VIX_Close
+		dataType: double
+		lineageTag: b19caa28-4676-4996-a5f6-28f98bbd185a
+		summarizeBy: sum
+		sourceColumn: VIX_Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Is_SP500_Trading_Day
+		dataType: int64
+		formatString: 0
+		lineageTag: c11023a2-a582-4d00-b5a2-b551e92ada4f
+		summarizeBy: sum
+		sourceColumn: Is_SP500_Trading_Day
+
+		annotation SummarizationSetBy = Automatic
+
+	partition market_base = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\tinat\OneDrive\Desktop\market-project\data\curated\market_base.csv"),[Delimiter=",", Columns=8
+				    , Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"SP500_Open", type number}, {"SP500_High", type number}, {"SP500_Low", type number}, {"SP500_Close", type number}, {"SP500_Volume", Int64.Type}, {"VIX_Close", type number}, {"Is_SP500_Trading_Day", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
