@@ -114,25 +114,36 @@ The solution allows the dashboard to compare actual market movement from the S&P
 ## Repository Structure
 
 ```
-Market-Intelligence-Platform/
+market-project/
 │
 ├── data/
-│   ├── raw/
+│   ├── raw/                         # Source extracts from Yahoo Finance and FRED
 │   │   ├── sp500_data.csv
 │   │   └── vix_data.csv
 │   │
-│   └── curated/
+│   └── curated/                     # Reusable analytical dataset for Power BI
 │       └── market_base.csv
 │
-├── logs/
+├── docs/                            # Supporting documentation and AI review evidence
+│   └── ai_self_reflection_log.md
+│
+├── logs/                            # Data quality and pipeline observability outputs
 │   └── data_quality_log.csv
 │
-├── src/
+├── powerbi/                         # Source-controlled Power BI project
+│   ├── Market intelligence report.pbip
+│   ├── Market intelligence report.Report/
+│   │   └── report definition files
+│   │
+│   └── Market intelligence report.SemanticModel/
+│       └── semantic model definition files
+│
+├── src/                             # Python ingestion and transformation logic
 │   ├── ingest.py
 │   └── transform.py
 │
-├── README.md
-└── Market_Intelligence.pbix
+├── .gitignore                       # Files and folders excluded from Git tracking
+└── README.md                        # Project overview, setup, design decisions and handoff notes
 ```
 
 # Setup Instructions
@@ -389,3 +400,16 @@ Note: for presentation layer: The signal was summarized to business viewers in t
 
 **Green** everything else
 
+## Power BI Project Format
+
+The Power BI report has been saved as a Power BI Project (`.pbip`) to improve source control, maintainability, and transparency of report and semantic model assets.
+
+This creates separate project folders for:
+
+- Report definition
+- Semantic model definition
+- Power BI project metadata
+
+This approach is more suitable for engineering workflows than relying only on a single `.pbix` file because changes to the report and semantic model can be tracked more clearly in GitHub.
+
+The `.pbix` file may be retained as a convenience file for opening the report directly in Power BI Desktop, while the `.pbip` project structure represents the source-controlled version of the Power BI asset.
