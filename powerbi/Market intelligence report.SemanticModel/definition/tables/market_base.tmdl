@@ -350,14 +350,15 @@ table market_base
 
 	partition market_base = m
 		mode: import
-		source =
+		source = ```
 				let
-				    Source = Csv.Document(File.Contents("C:\Users\tinat\OneDrive\Desktop\market-project\data\curated\market_base.csv"),[Delimiter=",", Columns=8
-				    , Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    Source = Csv.Document(Web.Contents("https://raw.githubusercontent.com/TinaT8888/market-project/refs/heads/main/data/curated/market_base.csv"),[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    
 				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Date", type date}, {"SP500_Open", type number}, {"SP500_High", type number}, {"SP500_Low", type number}, {"SP500_Close", type number}, {"SP500_Volume", Int64.Type}, {"VIX_Close", type number}, {"Is_SP500_Trading_Day", Int64.Type}})
 				in
 				    #"Changed Type"
+				```
 
 	annotation PBI_NavigationStepName = Navigation
 

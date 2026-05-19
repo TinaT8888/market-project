@@ -929,16 +929,6 @@ cultureInfo en-AU
 			          }
 			        },
 			        {
-			          "Market signal - sensitive": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
 			          "Current market signal": {
 			            "State": "Suggested",
 			            "Source": {
@@ -1179,7 +1169,7 @@ cultureInfo en-AU
 			          }
 			        },
 			        {
-			          "S&P500 Close": {
+			          "S&P 500 Close": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -1189,7 +1179,7 @@ cultureInfo en-AU
 			          }
 			        },
 			        {
-			          "S&P 500 Close": {
+			          "S&P500 Close": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -1450,16 +1440,6 @@ cultureInfo en-AU
 			          "signal 2": {
 			            "State": "Generated",
 			            "Weight": 0.97
-			          }
-			        },
-			        {
-			          "Market Signal - robust": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]

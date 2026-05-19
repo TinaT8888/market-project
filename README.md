@@ -339,6 +339,18 @@ It focuses on:
 -   simplified executive signals
 -   readability over technical complexity
 
+The Power BI report has been saved as a Power BI Project (`.pbip`) to improve source control, maintainability, and transparency of report and semantic model assets.
+
+This creates separate project folders for:
+
+- Report definition
+- Semantic model definition
+- Power BI project metadata
+
+This approach is more suitable for engineering workflows than relying only on a single `.pbix` file because changes to the report and semantic model can be tracked more clearly in GitHub.
+
+The `.pbix` file may be retained as a convenience file for opening the report directly in Power BI Desktop, while the `.pbip` project structure represents the source-controlled version of the Power BI asset.
+
 | Concepts used in dashboard   | Purpose                                                                                                |
 |------------------------------|--------------------------------------------------------------------------------------------------------|
 | S&P 500 trend of close price | Market direction over 90 days                                                                          |
