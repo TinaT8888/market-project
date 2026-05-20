@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
   "name": "70f9762261378b86f6c8",
   "position": {
-    "x": 0,
-    "y": 0,
-    "z": 0,
-    "height": 322.04283360790777,
-    "width": 497.001647446458,
+    "x": 2.4742268041237114,
+    "y": 5.3310660006376871,
+    "z": 1000,
+    "height": 551.13402061855675,
+    "width": 422.4742268041237,
     "tabOrder": 0
   },
   "visual": {
@@ -19,11 +19,12 @@
               {
                 "textRuns": [
                   {
-                    "value": "Design principles",
+                    "value": " Design principles",
                     "textStyle": {
                       "fontWeight": "bold",
                       "fontFamily": "Calibri",
-                      "fontSize": "24pt"
+                      "fontSize": "24pt",
+                      "color": "#ffffff"
                     }
                   }
                 ]
@@ -42,7 +43,7 @@
                     "textStyle": {
                       "fontWeight": "bold",
                       "fontFamily": "Calibri",
-                      "fontSize": "14pt",
+                      "fontSize": "16pt",
                       "color": "#1e293b"
                     }
                   }
@@ -101,7 +102,7 @@
                     "textStyle": {
                       "fontWeight": "bold",
                       "fontFamily": "Calibri",
-                      "fontSize": "14pt",
+                      "fontSize": "16pt",
                       "color": "#1e293b"
                     }
                   }
@@ -145,6 +146,62 @@
                   }
                 ],
                 "listType": "ordered"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": ""
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Understand the science of  ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Calibri",
+                      "fontSize": "16pt",
+                      "color": "#1e293b"
+                    }
+                  },
+                  {
+                    "value": "'attention'",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Calibri",
+                      "fontSize": "28pt",
+                      "color": "#fc0808"
+                    }
+                  },
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Calibri",
+                      "fontSize": "36pt",
+                      "color": "#fc0808"
+                    }
+                  },
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Calibri",
+                      "fontSize": "24pt",
+                      "color": "#fc0808"
+                    }
+                  },
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Calibri",
+                      "fontSize": "16pt",
+                      "color": "#1e293b"
+                    }
+                  }
+                ]
               }
             ]
           }
